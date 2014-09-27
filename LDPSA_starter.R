@@ -1,4 +1,4 @@
-# AfSIS laser diffraction particle size analyses (LDPSA)
+# AfSIS laser diffraction particle size analyses starter (LDPSA)
 # M. Walsh, September 2014
 
 # Set your local working directory here, e.g.
@@ -10,7 +10,8 @@ library(downloader)
 library(arm)
 library(compositions)
 
-# Load data
+# Load data and drop missing values ---------------------------------------
+
 download("https://www.dropbox.com/s/je066cib8zt9nh6/LDPSA_60.zip?dl=0", "LDPSA_60.zip", mode="wb")
 unzip("LDPSA_60.zip", overwrite=T)
 profile <- read.table("Profiles.csv", header=T, sep=",")
