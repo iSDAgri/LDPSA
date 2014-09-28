@@ -63,6 +63,10 @@ sand.lmer <- lmer(V1~Depth+TRT+(1|Site)+(1|GID), data=ldpsdat)
 display(sand.lmer)
 plot(V1~fitted(sand.lmer), ldpsdat)
 
+# Alternatively for treatments
+sand1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID), data=ldpsdat)
+display(sand1.lmer)
+
 # Extract and plot Site-level random effects and standard errors
 sand.ranef <- ranef(sand.lmer)
 sand.se <- se.coef(sand.lmer)
