@@ -52,6 +52,10 @@ CoDaDendrogram(X=acomp(cdata), signary=bpart)
 idata <- as.data.frame(ilr(cdata, V=bpart))
 ldpsdat <- cbind(ldpsdat, idata)
 
+# Write cleaned data frame ------------------------------------------------
+
+write.csv(ldpsdat, "LDPSA.dat.csv")
+
 # Example REML analyses ---------------------------------------------------
 
 # Main effects model [Sand|Silt,Clay] ilr
