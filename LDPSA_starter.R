@@ -55,7 +55,7 @@ ldpsdat <- cbind(ldpsdat, idata)
 # Example REML analyses ---------------------------------------------------
 
 # Main effects model [Sand|Silt,Clay] ilr
-sand.lmer <- lmer(V1~Depth+TRT+(1|Site), data=ldpsdat)
+sand.lmer <- lmer(V1~Depth+TRT+(1|Site)+(1|GID), data=ldpsdat)
 display(sand.lmer)
 plot(V1~fitted(sand.lmer), ldpsdat)
 
@@ -65,9 +65,9 @@ sand.se <- se.coef(sand.lmer)
 coefplot(sand.ranef$Site[,1], sand.se$Site[,1], varnames=rownames(sand.ranef$Site), xlim=c(-3,3), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
 # Main effects model [Silt|Clay] ilr
-sicl.lmer <- lmer(V2~Depth+TRT+(1|Site), data=ldpsdat)
+sicl.lmer <- lmer(V2~Depth+TRT+(1|Site)+(1|GID), data=ldpsdat)
 display(sicl.lmer)
 sicl.ranef <- ranef(sicl.lmer)
 sicl.se <- se.coef(sicl.lmer)
-coefplot(sicl.ranef$Site[,1], sicl.se$Site[,1], varnames=rownames(sicl.ranef$Site), xlim=c(-2,2), CI=2, cex.var=0.6, cex.pts=0.9, main="")
+coefplot(sicl.ranef$Site[,1], sicl.se$Site[,1], varnames=rownames(sicl.ranef$Site), xlim=c(-1,1), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
