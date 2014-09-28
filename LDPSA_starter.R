@@ -58,7 +58,7 @@ write.csv(ldpsdat, "LDPSA.dat.csv")
 
 # Example REML analyses ---------------------------------------------------
 
-# Main effects model [Sand|Silt,Clay] ilr
+# Main effects model ilr[Sand|Silt,Clay]
 sand.lmer <- lmer(V1~Depth+TRT+(1|Site)+(1|GID), data=ldpsdat)
 display(sand.lmer)
 plot(V1~fitted(sand.lmer), ldpsdat)
@@ -72,7 +72,7 @@ sand.ranef <- ranef(sand.lmer)
 sand.se <- se.coef(sand.lmer)
 coefplot(sand.ranef$Site[,1], sand.se$Site[,1], varnames=rownames(sand.ranef$Site), xlim=c(-3,3), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
-# Main effects model [Silt|Clay] ilr
+# Main effects model ilr[Silt|Clay]
 sicl.lmer <- lmer(V2~Depth+TRT+(1|Site)+(1|GID), data=ldpsdat)
 display(sicl.lmer)
 sicl.ranef <- ranef(sicl.lmer)
