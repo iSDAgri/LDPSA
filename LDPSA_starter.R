@@ -63,7 +63,7 @@ sand.lmer <- lmer(V1~Depth+TRT+(1|Site)+(1|GID), data=ldpsdat)
 display(sand.lmer)
 plot(V1~fitted(sand.lmer), ldpsdat)
 
-# Alternatively for treatments
+# Alternatively substituting dispersal agent by ultrasonification time interaction for treatments
 sand1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID), data=ldpsdat)
 display(sand1.lmer)
 
