@@ -11,8 +11,9 @@ require(proj4)
 require(raster)
 require(compositions)
 require(arm)
+require(soiltexture)
 
-# Load data and na.omit missing samples ------------------------------------
+# Load data and na.omit samples w missing values ---------------------------
 
 # LDPSA_60 lab data
 download("https://www.dropbox.com/s/je066cib8zt9nh6/LDPSA_60.zip?dl=0", "LDPSA_60.zip", mode="wb")
@@ -39,13 +40,23 @@ GID <- paste(gidx, gidy, sep="-")
 profile.gid <- cbind(profile, GID)
 ldpsdat <- merge(profile.gid, samples, by="PID")
 
-# Particle size compositions and isometric log ratio transforms -----------
+# Texture triangle plot examples ------------------------------------------
 
+# Air dispersed topsoils
+TRTa  <- subset(ldpsdat, TRT=="a" & Depth=="Topsoil", select=c(Site, Clay, Silt, Sand)) 
 fractions <- c("Sand","Silt","Clay")
-plot(acomp(ldpsdat[fractions]), axes=T, main=" ")
-cdata <- acomp(ldpsdat[fractions])
+TRTa.comp <- acomp(TRTa[fractions], total=100)
+TT.plot(tri.data=TRTa.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Topsoils dispersed in air", css.names=fractions)
+
+# Water dispersed topsoils ultr-sonified for 4 min
+TRTw4 <- subset(ldpsdat, TRT=="w4" & Depth=="Topsoil", select=c(Site, Clay, Silt, Sand))
+TRTw4.comp <- acomp(TRTw4[fractions], total=100)
+TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Topsoils dispersed in water & ultra-sonified 4 min", css.names=fractions)
+
+# Integrated log ratio (ilr) transformation -------------------------------
 
 # Define binary partion
+cdata <- acomp(ldpsdat[fractions])
 bpart <- t(matrix(c(1,-1,-1,
                     0, 1,-1), ncol=3, nrow=2, byrow=T))
 CoDaDendrogram(X=acomp(cdata), signary=bpart)					
