@@ -1,4 +1,4 @@
-# AfSIS laser diffraction particle size analyses starter (LDPSA)
+# AfSIS laser diffraction particle size analyses (LDPSA) starter
 # M. Walsh, September 2014
 
 # Set your local working directory here, e.g.
@@ -42,21 +42,21 @@ ldpsdat <- merge(profile.gid, samples, by="PID")
 
 # Texture triangle plot examples ------------------------------------------
 
-# Water dispersed topsoils
-TRTw1  <- subset(ldpsdat, TRT=="w1" & Depth=="Topsoil", select=c(Site, Clay, Silt, Sand)) 
+# Water dispersed samples
 fractions <- c("Clay","Silt","Sand")
+TRTw1  <- subset(ldpsdat, TRT=="w1", select=c(PID, Depth, SSN, Clay, Silt, Sand)) 
 TRTw1.comp <- as.data.frame(acomp(TRTw1[fractions], total=100))
-TT.plot(tri.data=TRTw1.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Topsoils dispersed in water", css.names=fractions)
+TT.plot(tri.data=TRTw1.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water", css.names=fractions)
 
-# Water dispersed topsoils ultra-sonified for 4 min
-TRTw4 <- subset(ldpsdat, TRT=="w4" & Depth=="Topsoil", select=c(Site, Clay, Silt, Sand))
+# Water dispersed samples, ultra-sonified for 4 min
+TRTw4 <- subset(ldpsdat, TRT=="w4", select=c(PID, Depth, SSN, Clay, Silt, Sand))
 TRTw4.comp <- as.data.frame(acomp(TRTw4[fractions], total=100))
-TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Topsoils dispersed in water & ultra-sonified 4 min", css.names=fractions)
+TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water + 4 min ultra-sonification", css.names=fractions)
 
 # Integrated log ratio (ilr) transformation -------------------------------
 
 # Define binary partion
-cdata <- acomp(ldpsdat[fractions])
+cdata <- acomp(ldpsdat[fractions], total=100)
 bpart <- t(matrix(c(1,-1,-1,
                     0, 1,-1), ncol=3, nrow=2, byrow=T))
 CoDaDendrogram(X=acomp(cdata), signary=bpart)					
