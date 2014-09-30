@@ -42,15 +42,15 @@ ldpsdat <- merge(profile.gid, samples, by="PID")
 
 # Texture triangle plot examples ------------------------------------------
 
-# Air dispersed topsoils
-TRTa  <- subset(ldpsdat, TRT=="a" & Depth=="Topsoil", select=c(Site, Clay, Silt, Sand)) 
-fractions <- c("Sand","Silt","Clay")
-TRTa.comp <- acomp(TRTa[fractions], total=100)
-TT.plot(tri.data=TRTa.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Topsoils dispersed in air", css.names=fractions)
+# Water dispersed topsoils
+TRTw1  <- subset(ldpsdat, TRT=="w1" & Depth=="Topsoil", select=c(Site, Clay, Silt, Sand)) 
+fractions <- c("Clay","Silt","Sand")
+TRTw1.comp <- as.data.frame(acomp(TRTw1[fractions], total=100))
+TT.plot(tri.data=TRTw1.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Topsoils dispersed in water", css.names=fractions)
 
-# Water dispersed topsoils ultr-sonified for 4 min
+# Water dispersed topsoils ultra-sonified for 4 min
 TRTw4 <- subset(ldpsdat, TRT=="w4" & Depth=="Topsoil", select=c(Site, Clay, Silt, Sand))
-TRTw4.comp <- acomp(TRTw4[fractions], total=100)
+TRTw4.comp <- as.data.frame(acomp(TRTw4[fractions], total=100))
 TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Topsoils dispersed in water & ultra-sonified 4 min", css.names=fractions)
 
 # Integrated log ratio (ilr) transformation -------------------------------
