@@ -53,6 +53,9 @@ TRTw4 <- subset(ldpsdat, TRT=="w4", select=c(PID, Depth, SSN, Clay, Silt, Sand))
 TRTw4.comp <- as.data.frame(acomp(TRTw4[fractions], total=100))
 TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water + 4 min ultra-sonification", css.names=fractions)
 
+# detach soiltexture because it messes up other plotting functions
+detach(package:soiltexture)
+
 # Integrated log ratio (ilr) transformation -------------------------------
 
 # Define binary partion
@@ -72,7 +75,6 @@ write.csv(ldpsdat, "LDPSA.dat.csv")
 # Main effects model ilr[Sand|Silt,Clay]
 sand.lmer <- lmer(V1~Depth+TRT+(1|Site)+(1|GID), data=ldpsdat)
 display(sand.lmer)
-plot(V1~fitted(sand.lmer), ldpsdat)
 
 # Alternatively substituting dispersal agent by ultrasonification time interaction for treatments
 sand1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID), data=ldpsdat)
