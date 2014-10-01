@@ -57,8 +57,8 @@ TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis
 
 # Define binary partion
 cdata <- acomp(ldpsdat[fractions], total=100)
-bpart <- t(matrix(c(1,-1,-1,
-                    0, 1,-1), ncol=3, nrow=2, byrow=T))
+bpart <- t(matrix(c(-1,-1, 1,
+                    -1, 1, 0), ncol=3, nrow=2, byrow=T))
 CoDaDendrogram(X=acomp(cdata), signary=bpart)					
 idata <- as.data.frame(ilr(cdata, V=bpart))
 ldpsdat <- cbind(ldpsdat, idata)
@@ -88,5 +88,5 @@ sicl.lmer <- lmer(V2~Depth+TRT+(1|Site)+(1|GID), data=ldpsdat)
 display(sicl.lmer)
 sicl.ranef <- ranef(sicl.lmer)
 sicl.se <- se.coef(sicl.lmer)
-coefplot(sicl.ranef$Site[,1], sicl.se$Site[,1], varnames=rownames(sicl.ranef$Site), xlim=c(-1,1), CI=2, cex.var=0.6, cex.pts=0.9, main="")
+coefplot(sicl.ranef$Site[,1], sicl.se$Site[,1], varnames=rownames(sicl.ranef$Site), xlim=c(-2,2), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
