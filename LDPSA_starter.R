@@ -73,11 +73,11 @@ write.csv(ldps.comp, "LDPSA_comp.csv")
 # Example REML analyses ---------------------------------------------------
 
 # Main effects model ilr[Sand|Silt,Clay]
-sand.lmer <- lmer(V1~Depth+TRT+(1|Site)+(1|GID), data=ldps.comp)
+sand.lmer <- lmer(V1~Depth+TRT+(1|Site)+(1|GID:Site), data=ldps.comp)
 display(sand.lmer)
 
 # Alternatively substituting dispersal medium by ultra-sonification time interaction for treatments
-sand1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID), data=ldps.comp)
+sand1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID:Site), data=ldps.comp)
 display(sand1.lmer)
 
 # Extract and plot Site-level random effects and standard errors
@@ -86,7 +86,7 @@ sand.se <- se.coef(sand.lmer)
 coefplot(sand.ranef$Site[,1], sand.se$Site[,1], varnames=rownames(sand.ranef$Site), xlim=c(-3,3), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
 # Main effects model ilr[Silt|Clay]
-sicl.lmer <- lmer(V2~Depth+TRT+(1|Site)+(1|GID), data=ldps.comp)
+sicl.lmer <- lmer(V2~Depth+TRT+(1|Site)+(1|GID:Site), data=ldps.comp)
 display(sicl.lmer)
 sicl.ranef <- ranef(sicl.lmer)
 sicl.se <- se.coef(sicl.lmer)
