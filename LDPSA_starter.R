@@ -58,7 +58,7 @@ TRTw4 <- subset(ldpsdat, TRT=="w4", select=c(PID, Depth, SSN, Clay, Silt, Sand))
 TRTw4.comp <- as.data.frame(acomp(TRTw4[fractions], total=100))
 TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water + 4 min ultra-sonification", css.names=fractions)
 
-# detach soiltexture because it messes up some other plotting functions
+# detach soiltexture because it may mess up some of your other plotting functions
 detach(package:soiltexture)
 
 # Integrated log ratio (ilr) transformation -------------------------------
@@ -77,25 +77,21 @@ write.csv(ldps.comp, "LDPSA_comp.csv")
 
 # Example REML analyses ---------------------------------------------------
 
-# Main effects model ilr[Sand|Silt,Clay]
-sand.lmer <- lmer(V1~Depth+TRT+(1|Site)+(1|GID:Site), data=ldps.comp)
-display(sand.lmer)
-
-# Alternatively substituting dispersal medium by ultra-sonification time interaction for treatments
-sand1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID:Site), data=ldps.comp)
-summary(sand1.lmer)
+# Main effects model ilr[Sand|Silt,Clay] = V1
+V1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID:Site), data=ldps.comp)
+summary(V1.lmer)
 
 # Extract and plot Site-level random effects and standard errors
-sand.ranef <- ranef(sand.lmer)
-sand.se <- se.coef(sand.lmer)
-coefplot(sand.ranef$Site[,1], sand.se$Site[,1], varnames=rownames(sand.ranef$Site), xlim=c(-3,3), CI=2, cex.var=0.6, cex.pts=0.9, main="")
+V1.ranef <- ranef(V1.lmer)
+V1.se <- se.coef(V1.lmer)
+coefplot(V1.ranef$Site[,1], V1.se$Site[,1], varnames=rownames(V1.ranef$Site), xlim=c(-3,3), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
-# Main effects model ilr[Silt|Clay]
-sicl.lmer <- lmer(V2~Depth+TRT+(1|Site)+(1|GID:Site), data=ldps.comp)
-summary(sicl.lmer)
-sicl.ranef <- ranef(sicl.lmer)
-sicl.se <- se.coef(sicl.lmer)
-coefplot(sicl.ranef$Site[,1], sicl.se$Site[,1], varnames=rownames(sicl.ranef$Site), xlim=c(-1,1), CI=2, cex.var=0.6, cex.pts=0.9, main="")
+# Main effects model ilr[Silt|Clay] = V2
+V2.lmer <- lmer(V2~Depth+Disp*Ultra+(1|Site)+(1|GID:Site), data=ldps.comp)
+summary(V2.lmer)
+V2.ranef <- ranef(V2.lmer)
+V2.se <- se.coef(V2.lmer)
+coefplot(V2.ranef$Site[,1], V2.se$Site[,1], varnames=rownames(V2.ranef$Site), xlim=c(-1,1), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
 # Ultrasonic treatment differences of samples dispersed in water with covariates
 water <- subset(ldps.comp, Disp=="water", select=c(Site, GID, SSN, Ultra, Depth, V1, V2))
