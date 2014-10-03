@@ -23,6 +23,11 @@ profile <- na.omit(profile)
 samples <- read.table("Samples.csv", header=T, sep=",")
 samples <- na.omit(samples)
 
+# Lab covariate data
+download("https://www.dropbox.com/s/gcga9uyt2b8cv9h/Lab_cov.csv.zip?dl=0", "Lab_cov.csv.zip", mode="wb")
+unzip("Lab_cov.csv.zip", overwrite=T)
+labcov <- read.table("Lab_cov.csv", header=T, sep=",")
+
 # Generate coordinate reference and GID's ----------------------------------
 
 # Project profile coords to Africa LAEA from LonLat
@@ -78,7 +83,7 @@ display(sand.lmer)
 
 # Alternatively substituting dispersal medium by ultra-sonification time interaction for treatments
 sand1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID:Site), data=ldps.comp)
-display(sand1.lmer)
+summary(sand1.lmer)
 
 # Extract and plot Site-level random effects and standard errors
 sand.ranef <- ranef(sand.lmer)
@@ -87,8 +92,25 @@ coefplot(sand.ranef$Site[,1], sand.se$Site[,1], varnames=rownames(sand.ranef$Sit
 
 # Main effects model ilr[Silt|Clay]
 sicl.lmer <- lmer(V2~Depth+TRT+(1|Site)+(1|GID:Site), data=ldps.comp)
-display(sicl.lmer)
+summary(sicl.lmer)
 sicl.ranef <- ranef(sicl.lmer)
 sicl.se <- se.coef(sicl.lmer)
 coefplot(sicl.ranef$Site[,1], sicl.se$Site[,1], varnames=rownames(sicl.ranef$Site), xlim=c(-1,1), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
+# Ultrasonic treatment differences of samples dispersed in water with covariates
+water <- subset(ldps.comp, Disp=="water", select=c(Site, GID, SSN, Ultra, Depth, V1, V2))
+water <- merge(water, labcov, by="SSN")
+
+wV1.lmer <- lmer(V1~I(Depth/100)+Ultra*log(SOC)+(1|Site)+(1|GID:Site), data=water)
+summary(wV1.lmer)
+wV2.lmer <- lmer(V2~I(Depth/100)+Ultra*log(SOC)+(1|Site)+(1|GID:Site), data=water)
+summary(wV2.lmer)
+
+# Ultrasonic treatment differences of samples dispersed in calgon with covariates
+calgon <- subset(ldps.comp, Disp=="calgon", select=c(Site, GID, SSN, Ultra, Depth, V1, V2))
+calgon <- merge(calgon, labcov, by="SSN")
+
+cV1.lmer <- lmer(V1~I(Depth/100)+Ultra*log(SOC)+(1|Site)+(1|GID:Site), data=calgon)
+summary(cV1.lmer)
+cV2.lmer <- lmer(V2~I(Depth/100)+Ultra*log(SOC)+(1|Site)+(1|GID:Site), data=calgon)
+summary(cV2.lmer)
