@@ -78,7 +78,7 @@ write.csv(ldps.comp, "LDPSA_comp.csv")
 # Example REML analyses ---------------------------------------------------
 
 # Main effects model ilr[Sand|Silt,Clay] = V1
-V1.lmer <- lmer(V1~Depth+Disp*Ultra+(1|Site)+(1|GID:Site), data=ldps.comp)
+V1.lmer <- lmer(V1~Disp*Ultra+I(Depth/100)+(1|Site)+(1|GID:Site), data=ldps.comp)
 summary(V1.lmer)
 
 # Extract and plot Site-level random effects and standard errors
@@ -87,7 +87,7 @@ V1.se <- se.coef(V1.lmer)
 coefplot(V1.ranef$Site[,1], V1.se$Site[,1], varnames=rownames(V1.ranef$Site), xlim=c(-3,3), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
 # Main effects model ilr[Silt|Clay] = V2
-V2.lmer <- lmer(V2~Depth+Disp*Ultra+(1|Site)+(1|GID:Site), data=ldps.comp)
+V2.lmer <- lmer(V2~Disp*Ultra+I(Depth/100)+(1|Site)+(1|GID:Site), data=ldps.comp)
 summary(V2.lmer)
 V2.ranef <- ranef(V2.lmer)
 V2.se <- se.coef(V2.lmer)
@@ -97,26 +97,25 @@ coefplot(V2.ranef$Site[,1], V2.se$Site[,1], varnames=rownames(V2.ranef$Site), xl
 water <- subset(ldps.comp, Disp=="water", select=c(Site, GID, SSN, Ultra, Depth, V1, V2))
 water <- merge(water, labcov, by="SSN")
 
-wV1.lmer <- lmer(V1~I(Depth/100)+Ultra*log(SOC)+(1|Site)+(1|GID:Site), data=water)
+wV1.lmer <- lmer(V1~Ultra+I(Depth/100)+log(SOC)+(1|Site)+(1|GID:Site), data=water)
 summary(wV1.lmer)
 wV1.ranef <- ranef(wV1.lmer)
 wV1.se <- se.coef(wV1.lmer)
 coefplot(wV1.ranef$Site[,1], wV1.se$Site[,1], varnames=rownames(wV1.ranef$Site), xlim=c(-2.5,2.5), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
-wV2.lmer <- lmer(V2~I(Depth/100)+Ultra*log(SOC)+(1|Site)+(1|GID:Site), data=water)
+wV2.lmer <- lmer(V2~Ultra+I(Depth/100)+log(SOC)+(1|Site)+(1|GID:Site), data=water)
 summary(wV2.lmer)
 wV2.ranef <- ranef(wV2.lmer)
 wV2.se <- se.coef(wV2.lmer)
 coefplot(wV2.ranef$Site[,1], wV2.se$Site[,1], varnames=rownames(wV2.ranef$Site), xlim=c(-1,1), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
-# explore this further & label w. site names, also look at LDSF observed erosion probabilities
-# plot(wV2.ranef$Site[,1]~wV1.ranef$Site[,1], xlim=c(-2,2), ylim=c(-1,1), xlab="ilr[Sand|Silt,Clay]", ylab="ilr[Silt|Clay]")
-
 # Ultrasonic treatment differences of samples dispersed in calgon with covariates
 calgon <- subset(ldps.comp, Disp=="calgon", select=c(Site, GID, SSN, Ultra, Depth, V1, V2))
 calgon <- merge(calgon, labcov, by="SSN")
 
-cV1.lmer <- lmer(V1~I(Depth/100)+Ultra*log(SOC)+(1|Site)+(1|GID:Site), data=calgon)
+cV1.lmer <- lmer(V1~Ultra+I(Depth/100)+log(SOC)+(1|Site)+(1|GID:Site), data=calgon)
 summary(cV1.lmer)
-cV2.lmer <- lmer(V2~I(Depth/100)+Ultra*log(SOC)+(1|Site)+(1|GID:Site), data=calgon)
+cV1.ranef <- ranef(cV1.lmer)
+cV2.lmer <- lmer(V2~Ultra+I(Depth/100)+log(SOC)+(1|Site)+(1|GID:Site), data=calgon)
 summary(cV2.lmer)
+cV2.ranef <- ranef(cV2.lmer)
