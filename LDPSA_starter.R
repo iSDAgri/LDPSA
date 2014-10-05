@@ -109,6 +109,10 @@ wV2.ranef <- ranef(wV2.lmer)
 wV2.se <- se.coef(wV2.lmer)
 coefplot(wV2.ranef$Site[,1], wV2.se$Site[,1], varnames=rownames(wV2.ranef$Site), xlim=c(-1,1), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
+# Site-level random effects plot for samples dispersed in water
+plot(wV1.ranef$Site[,1], wV2.ranef$Site[,1], type="n", xlim=c(-2,2), ylim=c(-1,1))
+text(wV1.ranef$Site[,1], wV2.ranef$Site[,1], labels = row.names(wV1.ranef$Site), cex=0.6)
+
 # Ultrasonic treatment differences of samples dispersed in calgon with covariates
 calgon <- subset(ldps.comp, Disp=="calgon", select=c(Site, GID, SSN, Ultra, Depth, V1, V2))
 calgon <- merge(calgon, labcov, by="SSN")
@@ -116,6 +120,15 @@ calgon <- merge(calgon, labcov, by="SSN")
 cV1.lmer <- lmer(V1~Ultra+I(Depth/100)+log(SOC)+(1|Site)+(1|GID:Site), data=calgon)
 summary(cV1.lmer)
 cV1.ranef <- ranef(cV1.lmer)
+cV1.se <- se.coef(cV2.lmer)
+coefplot(cV1.ranef$Site[,1], cV1.se$Site[,1], varnames=rownames(cV1.ranef$Site), xlim=c(-2,2), CI=2, cex.var=0.6, cex.pts=0.9, main="")
+
 cV2.lmer <- lmer(V2~Ultra+I(Depth/100)+log(SOC)+(1|Site)+(1|GID:Site), data=calgon)
 summary(cV2.lmer)
 cV2.ranef <- ranef(cV2.lmer)
+cV2.se <- se.coef(cV2.lmer)
+coefplot(cV2.ranef$Site[,1], cV2.se$Site[,1], varnames=rownames(cV2.ranef$Site), xlim=c(-1.5,1.5), CI=2, cex.var=0.6, cex.pts=0.9, main="")
+
+# Site-level random effects plot for samples dispersed in calgon
+plot(cV1.ranef$Site[,1], cV2.ranef$Site[,1], type="n", xlim=c(-2.5,2.5), ylim=c(-1.5,1.5))
+text(cV1.ranef$Site[,1], cV2.ranef$Site[,1], labels = row.names(cV1.ranef$Site), cex=0.7)
