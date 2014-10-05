@@ -110,8 +110,8 @@ wV2.se <- se.coef(wV2.lmer)
 coefplot(wV2.ranef$Site[,1], wV2.se$Site[,1], varnames=rownames(wV2.ranef$Site), xlim=c(-1,1), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
 # Site-level random effects plot for samples dispersed in water
-plot(wV1.ranef$Site[,1], wV2.ranef$Site[,1], type="n", xlim=c(-2,2), ylim=c(-1,1))
-text(wV1.ranef$Site[,1], wV2.ranef$Site[,1], labels = row.names(wV1.ranef$Site), cex=0.6)
+plot(wV1.ranef$Site[,1], wV2.ranef$Site[,1], type="n", xlim=c(-3,3), ylim=c(-1.5,1.5), xlab="ilr[Sand|Silt,Clay]", ylab="ilr[Silt|Clay]")
+text(wV1.ranef$Site[,1], wV2.ranef$Site[,1], labels = row.names(wV1.ranef$Site), cex=0.7)
 
 # Ultrasonic treatment differences of samples dispersed in calgon with covariates
 calgon <- subset(ldps.comp, Disp=="calgon", select=c(Site, GID, SSN, Ultra, Depth, V1, V2))
@@ -130,5 +130,5 @@ cV2.se <- se.coef(cV2.lmer)
 coefplot(cV2.ranef$Site[,1], cV2.se$Site[,1], varnames=rownames(cV2.ranef$Site), xlim=c(-1.5,1.5), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
 # Site-level random effects plot for samples dispersed in calgon
-plot(cV1.ranef$Site[,1], cV2.ranef$Site[,1], type="n", xlim=c(-2.5,2.5), ylim=c(-1.5,1.5))
+plot(cV1.ranef$Site[,1], cV2.ranef$Site[,1], type="n", xlim=c(-3,3), ylim=c(-1.5,1.5), xlab="ilr[Sand|Silt,Clay]", ylab="ilr[Silt|Clay]")
 text(cV1.ranef$Site[,1], cV2.ranef$Site[,1], labels = row.names(cV1.ranef$Site), cex=0.7)
