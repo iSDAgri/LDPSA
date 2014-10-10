@@ -51,4 +51,3 @@ detach()
 dcalgon <- merge(dcalgon, labcov, by="SSN")
 
 
-
