@@ -59,4 +59,3 @@ summary(dwV1.lmer)
 dwV2.lmer <- lmer(dwV2~I(Depth/100)+log(SOC)+EC+pH+ECEC+(1|Site)+(1|GID:Site), data=dwater)
 summary(dwV2.lmer)
 
-
