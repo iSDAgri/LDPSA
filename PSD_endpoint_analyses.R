@@ -50,4 +50,13 @@ dcalgon$dc <- c4v1-c1v1+c4v2-c1v2
 detach()
 dcalgon <- merge(dcalgon, labcov, by="SSN")
 
+# Example REML models -----------------------------------------------------
+
+# Main effects model 
+dwV1.lmer <- lmer(dwV1~I(Depth/100)+log(SOC)+EC+pH+ECEC+(1|Site)+(1|GID:Site), data=dwater)
+summary(dwV1.lmer)
+
+dwV2.lmer <- lmer(dwV2~I(Depth/100)+log(SOC)+EC+pH+ECEC+(1|Site)+(1|GID:Site), data=dwater)
+summary(dwV2.lmer)
+
 
