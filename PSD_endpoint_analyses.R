@@ -53,11 +53,21 @@ dcalgon <- merge(dcalgon, labcov, by="SSN")
 # Example REML models -----------------------------------------------------
 
 # Main effects PSD models for ultra-sonification changes in water 
-dwV1.lmer <- lmer(dwV1~I(Depth/100)+log(SOC)+EC+pH+ECEC+(1|Site)+(1|GID:Site), data=dwater)
+dwV1.lmer <- lmer(dwV1~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dwater)
 summary(dwV1.lmer)
 
-dwV2.lmer <- lmer(dwV2~I(Depth/100)+log(SOC)+EC+pH+ECEC+(1|Site)+(1|GID:Site), data=dwater)
+dwV2.lmer <- lmer(dwV2~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dwater)
 summary(dwV2.lmer)
 
-dw.lmer <- lmer(dw~I(Depth/100)+log(SOC)+EC+pH+ECEC+(1|Site)+(1|GID:Site), data=dwater)
+dw.lmer <- lmer(dw~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dwater)
 summary(dw.lmer)
+
+# Main effects PSD models for ultra-sonification changes in calgon
+dcV1.lmer <- lmer(dcV1~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dcalgon)
+summary(dcV1.lmer)
+
+dcV2.lmer <- lmer(dcV2~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dcalgon)
+summary(dwV2.lmer)
+
+dc.lmer <- lmer(dc~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dcalgon)
+summary(dc.lmer)
