@@ -55,19 +55,27 @@ dcalgon <- merge(dcalgon, labcov, by="SSN")
 # Main effects PSD models for ultra-sonification changes in water 
 dwV1.lmer <- lmer(dwV1~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dwater)
 summary(dwV1.lmer)
-
 dwV2.lmer <- lmer(dwV2~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dwater)
 summary(dwV2.lmer)
-
 dw.lmer <- lmer(dw~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dwater)
 summary(dw.lmer)
+
+# Site-level random effects plot for samples dispersed in water
+dwV1.ranef <- ranef(dwV1.lmer)
+dwV2.ranef <- ranef(dwV2.lmer)
+plot(dwV1.ranef$Site[,1], dwV2.ranef$Site[,1], type="n", xlim=c(-2,2), ylim=c(-1,1), xlab="delta(ilr[Sand|Silt,Clay])", ylab="delta(ilr[Silt|Clay])")
+text(dwV1.ranef$Site[,1], dwV2.ranef$Site[,1], labels = row.names(dwV1.ranef$Site), cex=0.7)
 
 # Main effects PSD models for ultra-sonification changes in calgon
 dcV1.lmer <- lmer(dcV1~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dcalgon)
 summary(dcV1.lmer)
-
 dcV2.lmer <- lmer(dcV2~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dcalgon)
 summary(dwV2.lmer)
-
 dc.lmer <- lmer(dc~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dcalgon)
 summary(dc.lmer)
+
+# Site-level random effects plot for samples dispersed in calgon
+dcV1.ranef <- ranef(dcV1.lmer)
+dcV2.ranef <- ranef(dcV2.lmer)
+plot(dcV1.ranef$Site[,1], dcV2.ranef$Site[,1], type="n", xlim=c(-2.5,2.5), ylim=c(-1.5,1.5), xlab="delta(ilr[Sand|Silt,Clay])", ylab="delta(ilr[Silt|Clay])")
+text(dcV1.ranef$Site[,1], dcV2.ranef$Site[,1], labels = row.names(dcV1.ranef$Site), cex=0.7)
