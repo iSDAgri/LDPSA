@@ -58,9 +58,6 @@ TRTw4 <- subset(ldpsdat, TRT=="w4", select=c(PID, Depth, SSN, Clay, Silt, Sand))
 TRTw4.comp <- as.data.frame(acomp(TRTw4[fractions], total=100))
 TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water + 4 min ultra-sonification", css.names=fractions)
 
-# detach soiltexture because it may mess up some of your other plotting functions
-detach(package:soiltexture)
-
 # Integrated log ratio (ilr) transformation -------------------------------
 
 # Define binary partion
