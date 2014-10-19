@@ -30,11 +30,12 @@ colnames(w1) <- c("Site", "GID", "SSN", "Depth", "w1v1", "w1v2")
 w4 <- subset(ldps.comp, TRT=="w4", select=c(SSN, V1, V2))
 colnames(w4) <- c("SSN", "w4v1", "w4v2")
 dwater <- merge(w1, w4, by="SSN")
-attach(dwater)
-dwater$dwV1 <- w4v1-w1v1
-dwater$dwV2 <- w4v2-w1v2
-dwater$dw <- w4v1-w1v1+w4v2-w1v2
-detach()
+dwater$dwV1 <- dwater$w4v1-dwater$w1v1
+dwater$dwV2 <- dwater$w4v2-dwater$w1v2
+vars <- c("dwV1","dwV2")
+w <- dwater[vars]
+Sw <- cov(w)
+dwater$dw <- mahalanobis(w, c(quantile(dwater$dwV1, prob=0.975), quantile(dwater$dwV2, prob=0.975)), Sw)
 dwater <- merge(dwater, labcov, by="SSN")
 
 # Calculate ultra-sonification PSD differences between samples dispersed in calgon
@@ -43,11 +44,12 @@ colnames(c1) <- c("Site", "GID", "SSN", "Depth", "c1v1", "c1v2")
 c4 <- subset(ldps.comp, TRT=="c4", select=c(SSN, V1, V2))
 colnames(c4) <- c("SSN", "c4v1", "c4v2")
 dcalgon <- merge(c1, c4, by="SSN")
-attach(dcalgon)
-dcalgon$dcV1 <- c4v1-c1v1
-dcalgon$dcV2 <- c4v2-c1v2
-dcalgon$dc <- c4v1-c1v1+c4v2-c1v2
-detach()
+dcalgon$dcV1 <- dcalgon$w4v1-dcalgon$w1v1
+dcalgon$dcV2 <- dcalgon$w4v2-dcalgon$w1v2
+vars <- c("dcV1","dcV2")
+c <- dcalgon[vars]
+Sc <- cov(c)
+dcalgon$dw <- mahalanobis(c, c(quantile(dcalgon$dwV1, prob=0.975), quantile(dcalgon$dwV2, prob=0.975)), Sc)
 dcalgon <- merge(dcalgon, labcov, by="SSN")
 
 # Example REML models -----------------------------------------------------
