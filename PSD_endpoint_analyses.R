@@ -44,12 +44,12 @@ colnames(c1) <- c("Site", "GID", "SSN", "Depth", "c1v1", "c1v2")
 c4 <- subset(ldps.comp, TRT=="c4", select=c(SSN, V1, V2))
 colnames(c4) <- c("SSN", "c4v1", "c4v2")
 dcalgon <- merge(c1, c4, by="SSN")
-dcalgon$dcV1 <- dcalgon$w4v1-dcalgon$w1v1
-dcalgon$dcV2 <- dcalgon$w4v2-dcalgon$w1v2
+dcalgon$dcV1 <- dcalgon$c4v1-dcalgon$c1v1
+dcalgon$dcV2 <- dcalgon$c4v2-dcalgon$c1v2
 vars <- c("dcV1","dcV2")
 c <- dcalgon[vars]
 Sc <- cov(c)
-dcalgon$dw <- mahalanobis(c, c(quantile(dcalgon$dwV1, prob=0.975), quantile(dcalgon$dwV2, prob=0.975)), Sc)
+dcalgon$dc <- mahalanobis(c, c(quantile(dcalgon$dcV1, prob=0.975), quantile(dcalgon$dcV2, prob=0.975)), Sc)
 dcalgon <- merge(dcalgon, labcov, by="SSN")
 
 # Example REML models -----------------------------------------------------
