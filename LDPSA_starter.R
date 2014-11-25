@@ -14,7 +14,6 @@ require(arm)
 require(soiltexture)
 
 # Load data and na.omit samples w missing values ---------------------------
-
 # LDPSA_60 lab data
 download("https://www.dropbox.com/s/je066cib8zt9nh6/LDPSA_60.zip?dl=0", "LDPSA_60.zip", mode="wb")
 unzip("LDPSA_60.zip", overwrite=T)
@@ -29,7 +28,6 @@ unzip("Lab_cov.csv.zip", overwrite=T)
 labcov <- read.table("Lab_cov.csv", header=T, sep=",")
 
 # Generate coordinate reference and GID's ----------------------------------
-
 # Project profile coords to Africa LAEA from LonLat
 profile.laea <- as.data.frame(project(cbind(profile$Lon, profile$Lat), "+proj=laea +ellps=WGS84 +lon_0=20 +lat_0=5 +units=m +no_defs"))
 colnames(profile.laea) <- c("x","y")
@@ -46,7 +44,6 @@ profile.gid <- cbind(profile, GID)
 ldpsdat <- merge(profile.gid, samples, by="PID")
 
 # Texture triangle plot examples ------------------------------------------
-
 # Water dispersed samples
 fractions <- c("Clay","Silt","Sand")
 TRTw1  <- subset(ldpsdat, TRT=="w1", select=c(PID, Depth, SSN, Clay, Silt, Sand)) 
@@ -59,7 +56,6 @@ TRTw4.comp <- as.data.frame(acomp(TRTw4[fractions], total=100))
 TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water + 4 min ultra-sonification", css.names=fractions)
 
 # Integrated log ratio (ilr) transformation -------------------------------
-
 # Define binary partion
 cdata <- acomp(ldpsdat[fractions], total=100)
 bpart <- t(matrix(c(-1,-1, 1,
@@ -69,11 +65,9 @@ idata <- as.data.frame(ilr(cdata, V=bpart))
 ldps.comp <- cbind(ldpsdat, idata)
 
 # Write cleaned data frame ------------------------------------------------
-
 write.csv(ldps.comp, "LDPSA_comp.csv")
 
 # Example REML analyses ---------------------------------------------------
-
 # Main effects model ilr[Sand|Silt,Clay] = V1
 V1.lmer <- lmer(V1~Disp*Ultra+I(Depth/100)+(1|Site)+(1|GID:Site), data=ldps.comp)
 summary(V1.lmer)

@@ -11,11 +11,9 @@ require(downloader)
 require(arm)
 
 # Either run LDPSA_starter.R first or download the data -------------------
-
-# LDPSA data
-# download("https://www.dropbox.com/s/8mxyz1jeacczhme/LDPSA_comp.csv.zip?dl=0", "LDPSA_comp.csv.zip", mode="wb")
-# unzip("LDPSA_comp.csv.zip", overwrite=T)
-# ldps.comp <- read.table("LDPSA_comp.csv". header=T, sep=",")
+download("https://www.dropbox.com/s/8mxyz1jeacczhme/LDPSA_comp.csv.zip?dl=0", "LDPSA_comp.csv.zip", mode="wb")
+unzip("LDPSA_comp.csv.zip", overwrite=T)
+ldps.comp <- read.table("LDPSA_comp.csv". header=T, sep=",")
 
 # Lab covariate data
 # download("https://www.dropbox.com/s/gcga9uyt2b8cv9h/Lab_cov.csv.zip?dl=0", "Lab_cov.csv.zip", mode="wb")
@@ -23,7 +21,6 @@ require(arm)
 # labcov <- read.table("Lab_cov.csv", header=T, sep=",")
 
 # Data setup --------------------------------------------------------------
-
 # Calculate ultra-sonification PSD differences between samples dispersed in water
 w1 <- subset(ldps.comp, TRT=="w1", select=c(Site, GID, SSN, Depth, V1, V2))
 colnames(w1) <- c("Site", "GID", "SSN", "Depth", "w1v1", "w1v2")
@@ -53,7 +50,6 @@ dcalgon$dc <- mahalanobis(c, c(quantile(dcalgon$dcV1, prob=0.975), quantile(dcal
 dcalgon <- merge(dcalgon, labcov, by="SSN")
 
 # Example REML models -----------------------------------------------------
-
 # Main effects PSD models for ultra-sonification changes in water 
 dwV1.lmer <- lmer(dwV1~I(Depth/100)+log(SOC)+EC+pH+log(ECEC)+(1|Site)+(1|GID:Site), data=dwater)
 summary(dwV1.lmer)
