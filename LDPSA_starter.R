@@ -1,9 +1,5 @@
-# AfSIS laser diffraction particle size analyses (LDPSA) starter
-# M. Walsh, September 2014
-
-# Set your local working directory here, e.g.
-dat_dir <- "/Users/markuswalsh/Documents/LDSF/LDPSA"
-setwd(dat_dir)
+#' AfSIS laser diffraction particle size analyses (LDPSA) starter
+#' M. Walsh, September 2014
 
 # Load packages
 require(downloader)
@@ -13,21 +9,25 @@ require(compositions)
 require(arm)
 require(soiltexture)
 
-# Load data and na.omit samples w missing values ---------------------------
+#+ Data download -----------------------------------------------------------
+# Set your local working directory here, e.g.
+dir.create("LDPSA_data", showWarnings=F)
+dat_dir <- "./LDPSA_data"
+
 # LDPSA_60 lab data
-download("https://www.dropbox.com/s/je066cib8zt9nh6/LDPSA_60.zip?dl=0", "LDPSA_60.zip", mode="wb")
-unzip("LDPSA_60.zip", overwrite=T)
-profile <- read.table("Profiles.csv", header=T, sep=",")
+download("https://www.dropbox.com/s/je066cib8zt9nh6/LDPSA_60.zip?dl=0", "./LDPSA_data/LDPSA_60.zip", mode="wb")
+unzip("./LDPSA_data/LDPSA_60.zip", exdir="./LDPSA_data", overwrite=T)
+profile <- read.table(paste(dat_dir, "/Profiles.csv", sep=""), header=T, sep=",")
 profile <- na.omit(profile)
-samples <- read.table("Samples.csv", header=T, sep=",")
+samples <- read.table(paste(dat_dir, "/Samples.csv", sep=""), header=T, sep=",")
 samples <- na.omit(samples)
 
 # Lab covariate data
-download("https://www.dropbox.com/s/gcga9uyt2b8cv9h/Lab_cov.csv.zip?dl=0", "Lab_cov.csv.zip", mode="wb")
-unzip("Lab_cov.csv.zip", overwrite=T)
-labcov <- read.table("Lab_cov.csv", header=T, sep=",")
+download("https://www.dropbox.com/s/gcga9uyt2b8cv9h/Lab_cov.csv.zip?dl=0", "./LDPSA_data/Lab_cov.csv.zip", mode="wb")
+unzip("./LDPSA_data/Lab_cov.csv.zip", exdir="./LDPSA_data", overwrite=T)
+labcov <- read.table(paste(dat_dir, "/Lab_cov.csv", sep=""), header=T, sep=",")
 
-# Generate coordinate reference and GID's ----------------------------------
+#+ Generate coordinate reference and GID's ----------------------------------
 # Project profile coords to Africa LAEA from LonLat
 profile.laea <- as.data.frame(project(cbind(profile$Lon, profile$Lat), "+proj=laea +ellps=WGS84 +lon_0=20 +lat_0=5 +units=m +no_defs"))
 colnames(profile.laea) <- c("x","y")
@@ -63,9 +63,7 @@ bpart <- t(matrix(c(-1,-1, 1,
 CoDaDendrogram(X=acomp(cdata), signary=bpart)					
 idata <- as.data.frame(ilr(cdata, V=bpart))
 ldps.comp <- cbind(ldpsdat, idata)
-
-# Write cleaned data frame ------------------------------------------------
-write.csv(ldps.comp, "LDPSA_comp.csv")
+# write.csv(ldps.comp, "LDPSA_comp.csv", row.name = F)
 
 # Example REML analyses ---------------------------------------------------
 # Main effects model ilr[Sand|Silt,Clay] = V1
