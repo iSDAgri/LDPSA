@@ -4,7 +4,6 @@
 # Load packages
 require(downloader)
 require(proj4)
-require(raster)
 require(compositions)
 require(arm)
 require(soiltexture)
