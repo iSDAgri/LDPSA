@@ -13,7 +13,7 @@ require(arm)
 # Either run LDPSA_starter.R first or download the data -------------------
 download("https://www.dropbox.com/s/8mxyz1jeacczhme/LDPSA_comp.csv.zip?dl=0", "LDPSA_comp.csv.zip", mode="wb")
 unzip("LDPSA_comp.csv.zip", overwrite=T)
-ldps.comp <- read.table("LDPSA_comp.csv". header=T, sep=",")
+ldps.comp <- read.table("LDPSA_comp.csv", header=T, sep=",")
 
 # Lab covariate data
 # download("https://www.dropbox.com/s/gcga9uyt2b8cv9h/Lab_cov.csv.zip?dl=0", "Lab_cov.csv.zip", mode="wb")
