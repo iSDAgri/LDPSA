@@ -2,31 +2,28 @@
 #' M. Walsh, September 2014
 
 # Load packages
+suppressPackageStartupMessages({
 require(downloader)
 require(proj4)
 require(compositions)
 require(arm)
 require(soiltexture)
+})
 
-#+ Data download -----------------------------------------------------------
+# Data download ------------------------------------------------------------
 # Set your local working directory here, e.g.
-dir.create("LDPSA_data", showWarnings=F)
-dat_dir <- "./LDPSA_data"
+dir.create("LDPSA60_data", showWarnings=F)
+setwd("./LDPSA60_data")
 
 # LDPSA_60 lab data
-download("https://www.dropbox.com/s/je066cib8zt9nh6/LDPSA_60.zip?dl=0", "./LDPSA_data/LDPSA_60.zip", mode="wb")
-unzip("./LDPSA_data/LDPSA_60.zip", exdir="./LDPSA_data", overwrite=T)
-profile <- read.table(paste(dat_dir, "/Profiles.csv", sep=""), header=T, sep=",")
+download("https://www.dropbox.com/s/je066cib8zt9nh6/LDPSA_60.zip?dl=0", "LDPSA_60.zip", mode="wb")
+unzip("LDPSA_60.zip", overwrite=T)
+profile <- read.table("Profiles.csv", header=T, sep=",")
 profile <- na.omit(profile)
-samples <- read.table(paste(dat_dir, "/Samples.csv", sep=""), header=T, sep=",")
+samples <- read.table("Samples.csv", header=T, sep=",")
 samples <- na.omit(samples)
 
-# Lab covariate data
-download("https://www.dropbox.com/s/gcga9uyt2b8cv9h/Lab_cov.csv.zip?dl=0", "./LDPSA_data/Lab_cov.csv.zip", mode="wb")
-unzip("./LDPSA_data/Lab_cov.csv.zip", exdir="./LDPSA_data", overwrite=T)
-labcov <- read.table(paste(dat_dir, "/Lab_cov.csv", sep=""), header=T, sep=",")
-
-#+ Generate coordinate reference and GID's ----------------------------------
+# Generate coordinate reference and GID's ----------------------------------
 # Project profile coords to Africa LAEA from LonLat
 profile.laea <- as.data.frame(project(cbind(profile$Lon, profile$Lat), "+proj=laea +ellps=WGS84 +lon_0=20 +lat_0=5 +units=m +no_defs"))
 colnames(profile.laea) <- c("x","y")
@@ -54,7 +51,7 @@ TRTw4 <- subset(ldpsdat, TRT=="w4", select=c(PID, Depth, SSN, Clay, Silt, Sand))
 TRTw4.comp <- as.data.frame(acomp(TRTw4[fractions], total=100))
 TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water + 4 min ultra-sonification", css.names=fractions)
 
-# Integrated log ratio (ilr) transformation -------------------------------
+# Isometric transform -----------------------------------------------------
 # Define binary partion
 cdata <- acomp(ldpsdat[fractions], total=100)
 bpart <- t(matrix(c(-1,-1, 1,
