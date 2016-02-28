@@ -7,7 +7,6 @@ require(downloader)
 require(proj4)
 require(compositions)
 require(arm)
-require(soiltexture)
 })
 
 # Data download ------------------------------------------------------------
@@ -40,16 +39,17 @@ profile.gid <- cbind(profile, GID)
 ldpsdat <- merge(profile.gid, samples, by="PID")
 
 # Texture triangle plot examples ------------------------------------------
-# Water dispersed samples
-fractions <- c("Clay","Silt","Sand")
-TRTw1  <- subset(ldpsdat, TRT=="w1", select=c(PID, Depth, SSN, Clay, Silt, Sand)) 
-TRTw1.comp <- as.data.frame(acomp(TRTw1[fractions], total=100))
-TT.plot(tri.data=TRTw1.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water", css.names=fractions)
+fractions <- c("Sand","Silt","Clay")
 
-# Water dispersed samples, ultra-sonified for 4 min
-TRTc4 <- subset(ldpsdat, TRT=="c4", select=c(SSN, PID, SSN, Clay, Silt, Sand))
-TRTc4.comp <- as.data.frame(acomp(TRTc4[fractions], total=100))
-TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in calgon + 4 min ultra-sonification", css.names=fractions)
+# Water dispersed samples, no ultra-sonification
+TRTw1  <- subset(ldpsdat, TRT=="w1", select=c(PID, SSN, Depth, Sand, Silt, Clay)) 
+TRTw1.comp <- acomp(TRTw1[fractions], total=100)
+plot(TRTw1.comp, cex=0.5, col="grey", center=F)
+
+# Calgon dispersed samples, ultra-sonified for 4 min
+TRTc4 <- subset(ldpsdat, TRT=="c4", select=c(PID, SSN, Depth, Sand, Silt, Clay))
+TRTc4.comp <- acomp(TRTc4[fractions], total=100)
+plot(TRTc4.comp, cex=0.5, col="grey", center=F)
 
 # Isometric log ratio (ilr) transform -------------------------------------
 # Define binary partion
@@ -62,7 +62,7 @@ ldps.comp <- cbind(ldpsdat, idata)
 # write.csv(ldps.comp, "LDPSA_comp.csv", row.name = F)
 
 # Example REML analyses ---------------------------------------------------
-# Main effects model ilr[Sand|Silt,Clay] = V1
+# Main effects model ilr[Clay|Silt,Sand] = V1
 V1.lmer <- lmer(V1~Disp*Ultra+I(Depth/100)+(1|Site)+(1|GID:Site), data=ldps.comp)
 summary(V1.lmer)
 
@@ -71,7 +71,7 @@ V1.ranef <- ranef(V1.lmer)
 V1.se <- se.coef(V1.lmer)
 coefplot(V1.ranef$Site[,1], V1.se$Site[,1], varnames=rownames(V1.ranef$Site), xlim=c(-3,3), CI=2, cex.var=0.6, cex.pts=0.9, main="")
 
-# Main effects model ilr[Silt|Clay] = V2
+# Main effects model ilr[Silt|Sand] = V2
 V2.lmer <- lmer(V2~Disp*Ultra+I(Depth/100)+(1|Site)+(1|GID:Site), data=ldps.comp)
 summary(V2.lmer)
 V2.ranef <- ranef(V2.lmer)
