@@ -47,15 +47,15 @@ TRTw1.comp <- as.data.frame(acomp(TRTw1[fractions], total=100))
 TT.plot(tri.data=TRTw1.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water", css.names=fractions)
 
 # Water dispersed samples, ultra-sonified for 4 min
-TRTw4 <- subset(ldpsdat, TRT=="w4", select=c(PID, Depth, SSN, Clay, Silt, Sand))
-TRTw4.comp <- as.data.frame(acomp(TRTw4[fractions], total=100))
-TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in water + 4 min ultra-sonification", css.names=fractions)
+TRTc4 <- subset(ldpsdat, TRT=="c4", select=c(SSN, PID, SSN, Clay, Silt, Sand))
+TRTc4.comp <- as.data.frame(acomp(TRTc4[fractions], total=100))
+TT.plot(tri.data=TRTw4.comp, class.sys="HYPRES.TT", cex=0.6, cex.lab=1, cex.axis=0.8, main="Dispersed in calgon + 4 min ultra-sonification", css.names=fractions)
 
-# Isometric transform -----------------------------------------------------
+# Isometric log ratio (ilr) transform -------------------------------------
 # Define binary partion
 cdata <- acomp(ldpsdat[fractions], total=100)
-bpart <- t(matrix(c(-1,-1, 1,
-                    -1, 1, 0), ncol=3, nrow=2, byrow=T))
+bpart <- t(matrix(c(1,-1,-1,
+                    0, 1,-1), ncol=3, nrow=2, byrow=T))
 CoDaDendrogram(X=acomp(cdata), signary=bpart)					
 idata <- as.data.frame(ilr(cdata, V=bpart))
 ldps.comp <- cbind(ldpsdat, idata)
