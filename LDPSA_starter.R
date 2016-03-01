@@ -60,7 +60,7 @@ bpart <- t(matrix(c(-1,-1, 1,
 CoDaDendrogram(X=acomp(cdata), signary=bpart)					
 idata <- as.data.frame(ilr(cdata, V=bpart))
 ldps.comp <- cbind(ldpsdat, idata)
-# write.csv(ldps.comp, "LDPSA_comp.csv", row.name = F)
+write.csv(ldps.comp, "LDPSA_comp.csv", row.names = F)
 
 # Example REML analyses ---------------------------------------------------
 # Main effects model ilr[Clay|Silt,Sand] = V1
